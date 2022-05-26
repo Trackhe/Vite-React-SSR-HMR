@@ -1,0 +1,25 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "clean": "",
+    "dev": "concurrently 'npm run server:dev' 'npm run client:dev'",
+    "client:dev": "vite",
+    "server:dev": "nodemon './build/server/server.js'",
+    "client:prod": "vite build --outDir './build/client'",
+    "server:prod": "vite build --ssr server/src/index.jsx --outDir './build/server'",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "concurrently": "*",
+    "@types/react": "*.*.*",
+    "@types/react-dom": "*",
+    "@vitejs/plugin-react": "*",
+    "vite": "*"
+  }
+}
