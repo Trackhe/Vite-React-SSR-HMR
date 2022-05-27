@@ -4,22 +4,23 @@
   "version": "0.0.0",
   "scripts": {
     "clean": "",
-    "dev": "concurrently 'npm run server:dev' 'npm run client:dev'",
-    "client:dev": "vite",
-    "server:dev": "nodemon './build/server/server.js'",
+    "dev": "nodemon server/src/index.js",
+    "build": "",
     "client:prod": "vite build --outDir './build/client'",
     "server:prod": "vite build --ssr server/src/index.jsx --outDir './build/server'",
     "preview": "vite preview"
   },
   "dependencies": {
+    "express": "^4.18.1",
     "react": "*",
     "react-dom": "*"
   },
   "devDependencies": {
-    "concurrently": "*",
     "@types/react": "*.*.*",
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "*",
+    "concurrently": "*",
+    "nodemon": "^2.0.16",
     "vite": "*"
   }
 }

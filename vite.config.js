@@ -11,45 +11,38 @@ export const paths = {
   public: path.resolve(__dirname, '.', 'build/public'),
 };
 
-const SSR = () => ({
-  name: 'ssr',
-  configureServer(vite) {
-    const { logger } = vite.config;
-    const templateHtml = fs.readFileSync(paths.template, 'utf-8');
-    console.log(templateHtml)
-    return () => vite.middlewares.use(async (req, res, next) => {
-      //try {
-        const { render } = await vite.ssrLoadModule(paths.serverEntry);
-        const template = await vite.transformIndexHtml(req.originalUrl, templateHtml);
-        const { html } = await render({ req, res, template });
-
-        res.end(html);
-      //} catch (e) {
-      //  console.log("hiho")
-      //  vite.ssrFixStacktrace(e);
-      //  logger.error(e.stack ?? e.message);
-      //  next();
-      //}
-    });
-  },
-});
-
-// https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+function ssrPlugin() {
+  /**
+   * @type {import('vite').Plugin}
+   */
   return {
-    build: {
-      sourcemap: true,
-      emptyOutDir: false,
-      outDir: 'build/app',
+    name: "ssrPlugin",
+
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        if (req.url !== "/") {
+          return next();
+        }
+
+        const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/server"));
+
+        const indexHtml = await fs.readFile(path.resolve(__dirname, "./index.html"),"utf-8");
+
+        const url = new URL("http://localhost:3000/" + req.url);
+        const template = await server.transformIndexHtml(url.toString(),indexHtml);
+
+        /**
+         * Scrape out `head` contents injected by Vite. This is used for React runtime and fast refresh.
+         * It will be injected into the `<Html>` React component shell in the server entrypoint.
+         */
+        const head = template.match(/<head>(.+?)<\/head>/s)[1];
+
+        return renderInNode({ res, head });
+      });
     },
-    resolve: {
-      alias: {
-        '@': paths.src,
-      },
-    },
-    plugins: [
-      react(),
-      SSR()
-    ]
-  }
+  };
+}
+
+export default defineConfig({
+  plugins: [react()],
 })
