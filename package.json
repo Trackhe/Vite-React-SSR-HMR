@@ -3,24 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "clean": "",
-    "dev": "nodemon server/src/index.js",
-    "build": "",
-    "client:prod": "vite build --outDir './build/client'",
-    "server:prod": "vite build --ssr server/src/index.jsx --outDir './build/server'",
-    "preview": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
-    "express": "^4.18.1",
+    "express": "*",
     "react": "*",
     "react-dom": "*"
   },
   "devDependencies": {
-    "@types/react": "*.*.*",
+    "@types/react": "*",
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "*",
-    "concurrently": "*",
-    "nodemon": "^2.0.16",
+    "nodemon": "*",
     "vite": "*"
   }
 }

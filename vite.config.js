@@ -3,14 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
 
-export const paths = {
-  template: path.resolve(__dirname, '.', 'index.html'),
-  server: path.resolve(__dirname, '.', 'server/src/index.jsx'),
-  clientoutput: path.resolve(__dirname, '.', 'build/client'),
-  serverOutput: path.resolve(__dirname, '.', 'build/server'),
-  public: path.resolve(__dirname, '.', 'build/public'),
-};
-
 function ssrPlugin() {
   /**
    * @type {import('vite').Plugin}
@@ -24,9 +16,9 @@ function ssrPlugin() {
           return next();
         }
 
-        const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/server"));
+        const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/index"));
 
-        const indexHtml = await fs.readFile(path.resolve(__dirname, "./index.html"),"utf-8");
+        const indexHtml = fs.readFileSync(path.resolve(__dirname, "./server/src/template.html"), "utf-8");
 
         const url = new URL("http://localhost:3000/" + req.url);
         const template = await server.transformIndexHtml(url.toString(),indexHtml);
@@ -37,12 +29,12 @@ function ssrPlugin() {
          */
         const head = template.match(/<head>(.+?)<\/head>/s)[1];
 
-        return renderInNode({ res, head });
+        return renderInNode( res, head );
       });
     },
   };
 }
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), ssrPlugin()]
 })

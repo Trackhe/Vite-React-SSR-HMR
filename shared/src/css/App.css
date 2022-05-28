@@ -2,13 +2,37 @@
   text-align: center;
 }
 
-.App-logo {
+.logo-wrapper {
+  display: flex;
+}
+
+.React-logo-wrapper {
+  position: relative;
+  width: 40vmin;
+  height: 40vmin;
+  overflow: hidden;
+}
+
+.React-logo {
+  position: absolute;
+  transform: translateX(-50%);
+  left:50%;
+  top:0;
   height: 40vmin;
   pointer-events: none;
 }
 
+.Vite-logo {
+  height: 40vmin;
+  width: 40vmin;
+  box-sizing: border-box;
+  padding: 3vmin 0;
+  pointer-events: none;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
+  .React-logo-wrapper  {
     animation: App-logo-spin infinite 20s linear;
   }
 }

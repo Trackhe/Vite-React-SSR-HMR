@@ -1,23 +1,26 @@
 import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
-import "./index.css"
 
-function App() {
+import Html from "./Html";
+
+import react_logo from './assets/images/react_logo.svg'
+import vite_logo from './assets/images/vite_logo.svg'
+
+function App({ head }) {
   const [count, setCount] = useState(0)
 
   return (
+    <Html head={head}>
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
+        <div className='logo-wrapper'><div className='React-logo-wrapper'><img src={react_logo} className="React-logo" alt="logo" /></div><img src={vite_logo} className="Vite-logo" alt="logo" /></div>
+        <p>Hello Vite + React 18 + SSR!</p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
             count is: {count}
           </button>
         </p>
         <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
+          Edit <code>shared/src/App.jsx</code> and save to test HMR updates.
         </p>
         <p>
           <a
@@ -40,6 +43,7 @@ function App() {
         </p>
       </header>
     </div>
+    </Html>
   )
 }
 
