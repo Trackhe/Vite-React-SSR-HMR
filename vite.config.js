@@ -18,7 +18,7 @@ function ssrPlugin() {
 
         const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/index"));
 
-        const indexHtml = fs.readFileSync(path.resolve(__dirname, "./server/src/template.html"), "utf-8");
+        const indexHtml = fs.readFileSync(path.resolve(__dirname, "./index.html"), "utf-8");
 
         const url = new URL("http://localhost:3000/" + req.url);
         const template = await server.transformIndexHtml(url.toString(),indexHtml);
