@@ -16,11 +16,16 @@ const html = fs.readFileSync(path.resolve(__dirname, `./index.html`), "utf-8").s
 let didError = false;
 export function renderInNode( res, head ) {
 
+  head = head.replace(
+    />(\s*?import[\s\w]+?['"]\/@react-refresh)/,
+    ' async="">$1'
+  );
+
   const { pipe, abort } = ReactDomServer.renderToPipeableStream(
     <React.StrictMode>
       <App />
     </React.StrictMode>, {
-      //bootstrapModules: ["../../client/src/index.jsx"],
+      bootstrapModules: ["../../client/src/index.jsx"],
       onShellReady() {
         res.statusCode = didError ? 500 : 200;
         res.setHeader('Content-type', 'text/html');
