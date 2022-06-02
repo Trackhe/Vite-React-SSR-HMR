@@ -24,7 +24,7 @@ export function renderInNode( res, head ) {
       onShellReady() {
         res.statusCode = didError ? 500 : 200;
         res.setHeader('Content-type', 'text/html');
-        res.write(html[0] + '<div id="root">')
+        res.write(`<!DOCTYPE html><html lang="en"><head>` + head + '<div id="root">')
         pipe(res);
       },
       onShellError(err) {
@@ -35,7 +35,7 @@ export function renderInNode( res, head ) {
         console.log(err);
       },
       onAllReady() {
-        res.write('</dev>' + head + html[1]);
+        res.write('</dev>' + html[1]);
       },
       onError(err) {
         didError = true;

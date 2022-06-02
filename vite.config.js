@@ -35,6 +35,19 @@ function ssrPlugin() {
   };
 }
 
-export default defineConfig({
-  plugins: [react(), ssrPlugin()]
+export default defineConfig(({ command, mode }) => {
+  console.log(command + " : " + mode)
+  if (command === "serve" && mode === "development") {
+    return {
+      plugins: [react(), ssrPlugin()]
+    }
+  } else {
+    // command === 'build'
+    return {
+      plugins: [react(), ssrPlugin()],
+      build: {
+        minify: false
+      }
+    }
+  }
 })
