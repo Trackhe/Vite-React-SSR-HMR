@@ -1,15 +1,12 @@
 import { useState } from 'react'
 
-import Html from "./Html";
-
 import react_logo from './assets/images/react_logo.svg'
 import vite_logo from './assets/images/vite_logo.svg'
 
-function App({ head }) {
+function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <Html head={head}>
     <div className="App">
       <header className="App-header">
         <div className='logo-wrapper'><div className='React-logo-wrapper'><img src={react_logo} className="React-logo" alt="logo" /></div><img src={vite_logo} className="Vite-logo" alt="logo" /></div>
@@ -43,7 +40,6 @@ function App({ head }) {
         </p>
       </header>
     </div>
-    </Html>
   )
 }
 

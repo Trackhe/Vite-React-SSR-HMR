@@ -11,31 +11,31 @@ import App from "../../shared/src/App";
  * Streaming SSR in a Node.js runtime
  */
 
-//const html = fs.readFileSync(path.resolve(__dirname, `./server/src/template.html`), "utf-8").split('<div id="root"></div>')
+const html = fs.readFileSync(path.resolve(__dirname, `./index.html`), "utf-8").split('<div id="root"></div>')
 
 let didError = false;
 export function renderInNode( res, head ) {
 
   const { pipe, abort } = ReactDomServer.renderToPipeableStream(
     <React.StrictMode>
-      <App head={head} />
+      <App />
     </React.StrictMode>, {
-      bootstrapModules: ["../../client/src/index.jsx"],
+      //bootstrapModules: ["../../client/src/index.jsx"],
       onShellReady() {
         res.statusCode = didError ? 500 : 200;
         res.setHeader('Content-type', 'text/html');
-        //res.write(html[0] + '<div id="root">')
+        res.write(html[0] + '<div id="root">')
         pipe(res);
       },
       onShellError(err) {
         res.statusCode = 500;
         res.send(
-          '<!doctype html><p>Error Loading...</p><script src="clientrender.js"></script>'
+          '<!doctype html><p>Error Loading...</p>'
         );
         console.log(err);
       },
       onAllReady() {
-        //res.write('</dev>' + html[1]);
+        res.write('</dev>' + head + html[1]);
       },
       onError(err) {
         didError = true;
@@ -43,8 +43,5 @@ export function renderInNode( res, head ) {
       },
   });
 
-
-  // Abandon and switch to client rendering if enough time passes.
-  // Try lowering this to see the client recover.
   setTimeout(abort, 2000);
 }

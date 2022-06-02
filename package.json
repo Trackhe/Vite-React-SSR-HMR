@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --outDir build"
+    "build": "vite build",
+    "preview": "npm run build && vite preview"
   },
   "dependencies": {
     "react": "*",
