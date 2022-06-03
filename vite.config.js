@@ -9,8 +9,7 @@ function ssrPlugin() {
    */
   return {
     name: "ssrPlugin",
-
-    configureServer(server) {
+    configurePreviewServer(server) {//configureServer
       server.middlewares.use(async (req, res, next) => {
         if (req.url !== "/") {
           return next();
