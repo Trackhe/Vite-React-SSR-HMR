@@ -16,6 +16,6 @@
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "*",
     "sass": "*",
-    "vite": "*"
+    "vite": "3.0.0-alpha.9"
   }
 }

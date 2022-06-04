@@ -3,26 +3,26 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
 
-function configuretheServer(server) {
+function configuretheServer(server, dorp) {
+  console.log(dorp)
   server.middlewares.use(async (req, res, next) => {
     if (req.url !== "/") {
-      return next();
+      return next()
     }
 
-    const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/index"));
+    if(dorp === "dev") {
+      const { renderInNode } = await server.ssrLoadModule(path.resolve(__dirname, "./server/src/index"))
+    } else {
+      const { renderInNode } = require("./dist/server/index.js")
+    }
+    const indexHtml = fs.readFileSync(path.resolve(__dirname, "./index.html"), "utf-8")
 
-    const indexHtml = fs.readFileSync(path.resolve(__dirname, "./index.html"), "utf-8");
+    const url = new URL("http://localhost:3000/" + req.url)
+    const template = await server.transformIndexHtml(url.toString(), indexHtml)
 
-    const url = new URL("http://localhost:3000/" + req.url);
-    const template = await server.transformIndexHtml(url.toString(),indexHtml);
+    const head = template.match(/<head>(.+?)<\/head>/s)[1]
 
-    /**
-     * Scrape out `head` contents injected by Vite. This is used for React runtime and fast refresh.
-     * It will be injected into the `<Html>` React component shell in the server entrypoint.
-     */
-    const head = template.match(/<head>(.+?)<\/head>/s)[1];
-
-    return renderInNode( res, head );
+    return renderInNode( res, head )
   });
 }
 
@@ -32,32 +32,8 @@ function ssrPlugin() {
    */
   return {
     name: "ssrPlugin",
-    //configureServer(server){configuretheServer(server)},
-    configurePreviewServer(server){
-      console.log("Preview Server Setup")
-      return () => {
-        server.middlewares.use((req, res, next) => {
-          if (req.url !== "/") {
-            return next();
-          }
-    
-          const { renderInNode } = server.ssrLoadModule(path.resolve(__dirname, "./server/src/index"));
-    
-          const indexHtml = fs.readFileSync(path.resolve(__dirname, "./index.html"), "utf-8");
-    
-          const url = new URL("http://localhost:3000/" + req.url);
-          const template = server.transformIndexHtml(url.toString(),indexHtml);
-    
-          /**
-           * Scrape out `head` contents injected by Vite. This is used for React runtime and fast refresh.
-           * It will be injected into the `<Html>` React component shell in the server entrypoint.
-           */
-          const head = template.match(/<head>(.+?)<\/head>/s)[1];
-    
-          return renderInNode( res, head );
-        });
-      }
-    }
+    configureServer(server){configuretheServer(server, "dev")},
+    configurePreviewServer(server){configuretheServer(server, "preview")}
   };
 }
 
