@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "preview": "vite serve",
     "build": "vite build",
-    "preview": "npm run build && vite preview"
+    "build:client": "vite build --outDir build/client",
+    "build:server": "vite build --outDir build/server"
   },
   "dependencies": {
     "react": "*",

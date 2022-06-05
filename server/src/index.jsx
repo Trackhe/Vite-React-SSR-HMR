@@ -7,10 +7,6 @@ __dirname = path.resolve();
 
 import App from "../../shared/src/App";
 
-/**
- * Streaming SSR in a Node.js runtime
- */
-
 const html = fs.readFileSync(path.resolve(__dirname, `./index.html`), "utf-8").split('<div id="root"></div>')
 
 let didError = false;
